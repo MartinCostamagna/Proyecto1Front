@@ -2,18 +2,24 @@ export interface Presentacion {
   id: number;
   denominacion: string;
   observacion: string | null;
+  sistema: number;
+  deletedAt: string | null;
   createdAt: string;
   updatedAt: string;
-  deletedAt: string | null;
   usuarioCreatedId: number;
   usuarioUpdatedId: number;
-  sistema: boolean;
+  usuarioDeletedId: number | null;
 }
 
+export interface DtoConsultarPresentacion {
+  data: Presentacion[];
+  total: number;
+}
 
 export interface ConsultarPresentacion {
   id: number;
   denominacion: string;
+  deletedAt?: string | null;
 }
 
 export interface SelectPresentacion {

@@ -23,6 +23,7 @@ export interface FormValues {
   envioGratis?: boolean | null; */
   lineaId: number;
   marcaId: number;
+  presentacionId?: number | null;
   /* subLineaId?: number | null */
   alicuotaIva: number | null;
   /* ubicacion?: string | null;
@@ -87,6 +88,18 @@ export const schema = (utilizaStockMinimo: boolean, utilizaPack: boolean, usaOfe
       .required("La línea es obligatoria.")
       .transform((value, originalValue) => (originalValue === "" ? null : value)) // Si el valor es una cadena vacía, lo convierte en null.
       .required("La linea es obligatoria."),
+    presentacionId: yup
+      .number()
+      .typeError("La presentación debe ser un número entero.")
+      .integer("La presentación debe ser un número entero.")
+      .nullable()
+      .optional()
+      .transform((value, originalValue) => {
+        if (originalValue === "" || originalValue === null || originalValue === undefined || originalValue === 0) {
+          return null;
+        }
+        return value;
+      }),
     alicuotaIva: yup
       .number()
       .oneOf(Object.values(AlicuotaIva), "Alicuota IVA inválida")
@@ -176,6 +189,7 @@ export const transformData = (producto: Producto): FormValues => {
    // ubicacion: producto.ubicacion ?? null,
     marcaId: producto.marca.id ?? 0,
     lineaId: producto.linea.id ?? 0,
+    presentacionId: producto.presentacion?.id ?? null,
    /*  subLineaId: producto.sublinea?.id ?? 0,
     presentacionId: producto.presentacion.id ?? 0,
  */
