@@ -18,6 +18,13 @@ interface Props {
 export function DatosTabla({ lineas, onEditar, onInfo, onDelete }: Props) {
   const columns: Column<Linea>[] = [
     {
+      header: "Superlínea",
+      accessor: "superlinea",
+      formatFunction: ({ row }) => (
+        <span>{row.superlinea?.denominacion ?? "-"}</span>
+      ),
+    },
+    {
       header: "Denominación",
       accessor: "denominacion",
       ...denominacionNotScrollColumnProps,

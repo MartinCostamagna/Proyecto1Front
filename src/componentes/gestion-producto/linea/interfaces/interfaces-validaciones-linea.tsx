@@ -5,6 +5,7 @@ import { Linea } from "../../../../interfaces/gestion-producto/linea/interfaces-
 
 export interface FormValues {
   denominacion: string;
+  superlineaId: number;
   observacion?: string | null;
   stockMinimo?: number;
   utilizaStockMinimo?: boolean;
@@ -27,6 +28,12 @@ export const schema = (utilizaStockMinimo: boolean) =>
       .required("La denominación es obligatoria.")
       .max(255, "Máximo 255 caracteres.")
       .matches(/^[A-Za-z0-9 áéíóúÁÉÍÓÚñÑ]+$/, "Solo se permiten letras, números y espacios."),
+    superlineaId: yup
+      .number()
+      .typeError("La superlínea debe ser un número.")
+      .required("La superlínea es obligatoria.")
+      .integer("La superlínea debe ser un número entero.")
+      .min(1, "La superlínea es obligatoria."),
     observacion: yup.string().optional().nullable(),
     stockMinimo: yup.number().when([], {
       is: () => utilizaStockMinimo,
@@ -42,6 +49,7 @@ export const schema = (utilizaStockMinimo: boolean) =>
 export const transformData = (linea: Linea): FormValues => {
   return {
     denominacion: linea.denominacion,
+    superlineaId: linea.superlineaId,
     observacion: linea.observacion ?? null,
     stockMinimo: linea.stockMinimo ?? 0,
     utilizaStockMinimo: linea.utilizaStockMinimo ?? false,
