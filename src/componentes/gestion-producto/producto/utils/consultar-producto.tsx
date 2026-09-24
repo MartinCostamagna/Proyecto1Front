@@ -91,6 +91,7 @@ export default function ConsultarProductos() {
   const {
     setLineas,
     setMarcas,
+    setSuperlineas,
     setProveedores,
   } = useCatalogosContext();
   
@@ -102,6 +103,7 @@ export default function ConsultarProductos() {
       denominacion: true,
       codigoProveedor: true,
       linea: true,
+      superlinea: true,
       marca: true,
       proveedor: true,
       conStock: true,
@@ -187,6 +189,31 @@ export default function ConsultarProductos() {
   useEffect(() => {
     fetchMarcas();
   }, [valoresFiltros.denominacionMarca]);
+
+  const fetchSuperlineas = async () => {
+    setError(null);
+    try {
+      const caracteresParaBusqueda = configuracion?.caracteresParaBusqueda ?? 4;
+
+      if (
+        valoresFiltros.denominacionSuperlinea &&
+        valoresFiltros.denominacionSuperlinea.length >= caracteresParaBusqueda
+      ) {
+        const superlineasTotales = await ProductoService.obtenerTotales(
+          { denominacion: valoresFiltros.denominacionSuperlinea || " " },
+          "superlineas"
+        );
+        setSuperlineas(superlineasTotales.data);
+      }
+    } catch (err: any) {
+      console.error("Error al obtener superlíneas:", err);
+      setError("No se pudieron cargar las superlíneas.");
+    } finally {
+    }
+  };
+  useEffect(() => {
+    fetchSuperlineas();
+  }, [valoresFiltros.denominacionSuperlinea]);
 
   const fetchProveedores = async () => {
     setError(null);
@@ -361,6 +388,7 @@ export default function ConsultarProductos() {
       codigoProveedor: valoresFiltros.codigoProveedor,
       codigoReferencia: valoresFiltros.codigoReferencia,
       lineaId: valoresFiltros.lineaId,
+      superlineaId: valoresFiltros.superlineaId,
       marcaId: valoresFiltros.marcaId,
       proveedorId: valoresFiltros.proveedorId,
       conStock: valoresFiltros.conStock,
@@ -407,6 +435,7 @@ export default function ConsultarProductos() {
       codProveedorExacto: valoresFiltros.codProveedorExacto,
       codReferenciaExacto: valoresFiltros.codReferenciaExacto,
       lineaId: valoresFiltros.lineaId,
+      superlineaId: valoresFiltros.superlineaId,
       marcaId: valoresFiltros.marcaId,
       proveedorId: valoresFiltros.proveedorId,
       conStock: valoresFiltros.conStock,
