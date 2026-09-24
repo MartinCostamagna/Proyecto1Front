@@ -2,6 +2,7 @@ import { createContext, useContext, useState, ReactNode } from "react";
 import { SelectLinea } from "../interfaces/gestion-producto/linea/interfaces-linea";
 import { SelectSublinea } from "../interfaces/gestion-producto/sublinea/interfaces-sublinea";
 import { SelectMarca } from "../interfaces/gestion-producto/marca/interfaces-marca";
+import { SelectSuperlinea } from "../interfaces/gestion-producto/superlinea/interfaces-superlinea";
 import { SelectCliente } from "../interfaces/gestion-organizacion/cliente/interfaces-cliente";
 import { SelectProveedor } from "../interfaces/gestion-organizacion/proveedor/interfaces-proveedor";
 import { SelectCondicionIva } from "../interfaces/gestion-organizacion/condicion-iva/interfaces-condicion-iva";
@@ -13,6 +14,8 @@ interface CatalogosContextType {
   setLineas: (lineas: SelectLinea[]) => void;
   sublineas: SelectSublinea[];
   setSublineas: (sublineas: SelectSublinea[]) => void;
+  superlineas: SelectSuperlinea[];
+  setSuperlineas: (superlineas: SelectSuperlinea[]) => void;
   marcas: SelectMarca[];
   setMarcas: (marcas: SelectMarca[]) => void;
   clientes: SelectCliente[];
@@ -38,6 +41,7 @@ export const useCatalogosContext = () => {
 export const CatalogosProvider = ({ children }: { children: ReactNode }) => {
   const [lineas, setLineas] = useState<SelectLinea[]>([]);
   const [sublineas, setSublineas] = useState<SelectSublinea[]>([]);
+  const [superlineas, setSuperlineas] = useState<SelectSuperlinea[]>([]);
   const [marcas, setMarcas] = useState<SelectMarca[]>([]);
   const [clientes, setClientes] = useState<SelectCliente[]>([]);
   const [proveedores, setProveedores] = useState<SelectProveedor[]>([]);
@@ -52,6 +56,8 @@ export const CatalogosProvider = ({ children }: { children: ReactNode }) => {
         setLineas,
         sublineas,
         setSublineas,
+        superlineas,
+        setSuperlineas,
         marcas,
         setMarcas,
         clientes,

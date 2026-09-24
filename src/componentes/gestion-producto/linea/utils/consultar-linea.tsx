@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import LineaService from "../services/linea-service";
+import SuperlineaService from "../../superlinea/services/superlinea-service";
 import type { Linea } from "../../../../interfaces/gestion-producto/linea/interfaces-linea";
+import type { SelectSuperlinea } from "../../../../interfaces/gestion-producto/superlinea/interfaces-superlinea";
 import Paginacion from "../../../herramientas/reutilizables/paginacion";
 import { Card, CardContent, CardHeader } from "../../../ui/Card";
 import { useFiltrosContext } from "../../../../context/filtros-contesxt";
@@ -29,6 +31,7 @@ export default function ConsultarLineas() {
   const [lineas, setLineas] = useState<Linea[]>([]);
   const [loading, setLoading] = useState(false);
   const [error] = useState<string | null>(null);
+  const [superlineasMap, setSuperlineasMap] = useState<Map<number, SelectSuperlinea>>(new Map());
 
   const { alerts, addAlert, removeAlert } = useAlerts();
   const { showConfirmation, AlertasConfirmacion } = useConfirmation();
@@ -56,10 +59,22 @@ export default function ConsultarLineas() {
   const { setFiltrosNecesarios, limpiarFiltros, buscar, setBuscar } = useFiltrosContext();
 
   useEffect(() => {
-    limpiarFiltros();
-    setBuscar({ cont: 0, componente: NOMBRE_COMPONENTE });
-    setFiltrosNecesarios({ denominacion: true });
-    setFiltrosInicializados(true);
+    const init = async () => {
+      try {
+        const res = await SuperlineaService.obtenerTotales({ denominacion: " " }, "superlineas");
+        const map = new Map<number, SelectSuperlinea>();
+        res.data.forEach((s: SelectSuperlinea) => map.set(s.id, s));
+        setSuperlineasMap(map);
+      } catch {
+        // Si falla la carga de superlíneas, se continúa sin traducir nombres.
+      }
+
+      limpiarFiltros();
+      setBuscar({ cont: 0, componente: NOMBRE_COMPONENTE });
+      setFiltrosNecesarios({ denominacion: true });
+      setFiltrosInicializados(true);
+    };
+    init();
   }, []);
 
   useEffect(() => {
@@ -135,9 +150,21 @@ export default function ConsultarLineas() {
       take,
     };
 
-    const response = await LineaService.obtener(filtrosConPaginacion);
+    const [response, superlineasRes] = await Promise.all([
+      LineaService.obtener(filtrosConPaginacion),
+      SuperlineaService.obtenerTotales({ denominacion: " " }, "superlineas"),
+    ]);
 
-    setLineas(response.data);
+    const map = new Map<number, SelectSuperlinea>();
+    superlineasRes.data.forEach((s: SelectSuperlinea) => map.set(s.id, s));
+    setSuperlineasMap(map);
+
+    const lineasEnriquecidas: Linea[] = (response.data as Linea[]).map((linea) => ({
+      ...linea,
+      superlinea: linea.superlinea ?? map.get(linea.superlineaId),
+    }));
+
+    setLineas(lineasEnriquecidas);
     setEntidadesTotales(response.total);
     setLoading(false);
   };

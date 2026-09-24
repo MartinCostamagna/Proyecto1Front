@@ -144,7 +144,7 @@ export default function CambioPreciosMasivo() {
         message: "¿Estás seguro de que quieres eliminar este elemento? Esta acción no se puede deshacer.",
         confirmText: "Eliminar",
         cancelText: "Cancelar",
-        onConfirm: () => {},
+        onConfirm: () => { },
       });
       if (!confirmed) return;
 
@@ -209,6 +209,35 @@ export default function CambioPreciosMasivo() {
       duration: 3000,
     });
   }, [guardarCambios, addAlert]);
+
+  const handleAplicarCambiosMasivos = useCallback(
+    async (valor: number, tipo: "PORCENTAJE" | "MONTO") => {
+      try {
+        const response = await aplicarCambios(
+          valor,
+          tipo,
+          valoresFiltros.lineaId && valoresFiltros.lineaId !== 0 ? valoresFiltros.lineaId : undefined,
+        );
+
+        addAlert({
+          type: TipoAlerta.SUCCESS,
+          title: TituloAlerta.SUCCESS,
+          message: response.mensaje,
+          autoClose: true,
+          duration: 3000,
+        });
+      } catch (error) {
+        addAlert({
+          type: TipoAlerta.ERROR,
+          title: TituloAlerta.ERROR,
+          message: "No se pudo aplicar la actualización masiva de precios.",
+          autoClose: true,
+          duration: 3000,
+        });
+      }
+    },
+    [aplicarCambios, addAlert, valoresFiltros.lineaId]
+  );
 
   const columns = useMemo<Column<ConsultarProductosCambioPreciosMasivo>[]>(
     () => [
@@ -353,7 +382,7 @@ export default function CambioPreciosMasivo() {
                     subLineaId: valoresFiltros.sublineaId,
                   })
                 }
-                onAplicarCambios={aplicarCambios}
+                onAplicarCambios={handleAplicarCambiosMasivos}
                 onGuardarCambios={handleGuardarCambios}
                 fetchMarcas={fetchMarcas}
                 fetchLineas={fetchLineas}

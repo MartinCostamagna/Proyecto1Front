@@ -13,7 +13,7 @@ const baseService = createCrudService<FormValues>("producto");
 const ProductoService = {
   ...baseService,
 
-  
+
   obtenerMobile: async (filtros: any) => {
     try {
       const token = localStorage.getItem("Token");
@@ -40,6 +40,19 @@ const ProductoService = {
       return result;
     } catch (error) {
       console.error("Error al actualizar producto:", error);
+      throw error;
+    }
+  },
+
+  actualizarPreciosMasivos: async (payload: any) => {
+    try {
+      const token = localStorage.getItem("Token");
+      const headers = token ? { Authorization: `Bearer ${token}` } : {};
+
+      const { data } = await axios.post(`${apiUrl}/producto/precios-masivos`, payload, { headers });
+      return data;
+    } catch (error) {
+      console.error("Error al actualizar precios masivos:", error);
       throw error;
     }
   },

@@ -16,6 +16,8 @@ export interface ValoresFiltros {
   codReferenciaExacto?: boolean;
   lineaId?: number;
   denominacionLinea?: string;
+  superlineaId?: number;
+  denominacionSuperlinea?: string;
   marcaId?: number;
   denominacionMarca?: string;
   conStock?: boolean;

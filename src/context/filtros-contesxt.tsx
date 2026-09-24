@@ -10,6 +10,8 @@ interface ValoresFiltros {
   codReferenciaExacto?: boolean;
   lineaId?: number;
   denominacionLinea?: string;
+  superlineaId?: number;
+  denominacionSuperlinea?: string;
   sublineaId?: number;
   denominacionSublinea?: string;
   marcaId?: number;
@@ -87,6 +89,7 @@ export const FiltrosProvider = ({ children }: { children: ReactNode }) => {
     codigoProveedor: false,
     codigoReferencia: false,
     linea: false,
+    superlinea: false,
     sublinea: false,
     marca: false,
     conStock: false,
