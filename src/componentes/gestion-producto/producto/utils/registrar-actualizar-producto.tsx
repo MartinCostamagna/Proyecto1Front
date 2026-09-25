@@ -98,7 +98,15 @@ export default function RegistrarActualizarProductoForm({
   const cantidadPorPack = watch("cantidadPorPack");
   const utilizaStockMinimo = watch("utilizaStockMinimo");
   const utilizaPack = watch("utilizaPack");
-  
+  const costo = watch("costo") || 0;
+  const porcentaje = watch("porcentaje") || 0;
+  const precio = watch("precio") || 0;
+
+  // CR-007: Efecto para calcular el precio automáticamente (Costo + Margen)
+  useEffect(() => {
+    const precioCalculado = costo + (costo * (porcentaje / 100));
+    setValue("precio", precioCalculado, { shouldValidate: true });
+  }, [costo, porcentaje, setValue]);
 
   //=============================== CONSTANTES PARA MOVIMIENTO ENTRE CAMPOS ==================================
   const denominacionProductoRef = useRef<HTMLInputElement>(null);
@@ -200,6 +208,16 @@ export default function RegistrarActualizarProductoForm({
         const confirmar = window.confirm(mensaje);
 
         if (!confirmar) return; // el usuario canceló
+      }
+        // CR-007: Validar que si el precio cambia en un producto existente, el motivo es obligatorio
+      if (producto && producto.precio !== formData.precio) {
+        if (!formData.motivo || formData.motivo.trim() === "") {
+          setError("motivo", {
+            type: "manual",
+            message: "Debe ingresar un motivo válido para el cambio de precio.",
+          });
+          return; // Detiene el envío
+        }
       }
 
       if (producto) {
@@ -414,19 +432,30 @@ export default function RegistrarActualizarProductoForm({
                   />
                   <PriceInput
                     name="precio"
-                    label="Precio"
+                    label="Precio de Venta (Calculado)"
                     value={watch("precio") || 0}
                     onChange={(value) => setValue("precio", value, { shouldValidate: true })}
                     maxDigits={9}
-                    disabled={producto && producto.sistema > 0 ? true : false}
+                    disabled={true} // CR-007: El precio ya no se carga manualmente
                   />
                   <PorcentajeInput
                     name="porcentaje"
-                    label="Porcentaje"
+                    label="Margen (%)"
                     value={watch("porcentaje") || 0}
                     onChange={(value) => setValue("porcentaje", value, { shouldValidate: true })}
                     disabled={producto && producto.sistema > 0 ? true : false}
                   />
+
+                  {/* CR-007: Campo de Motivo (Aparece solo si es una edición y el precio cambió) */}
+                  {producto && producto.precio !== watch("precio") && (
+                    <div className="col-span-full mt-2 p-4 bg-orange-50 border border-orange-200 rounded-lg">
+                      <FormInput
+                        name="motivo"
+                        label="Motivo del cambio de precio *"
+                        placeholder="Ej: Aumento de proveedor, error de carga..."
+                      />
+                    </div>
+                  )}
 
                   
 
