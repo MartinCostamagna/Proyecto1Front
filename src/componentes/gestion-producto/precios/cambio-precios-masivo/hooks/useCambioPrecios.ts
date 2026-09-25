@@ -1,5 +1,6 @@
 import { useState } from "react";
 import CambioPreciosMasivoService from "../cambio-precios-masivo-service";
+import ProductoService from "../../../producto/services/producto-service";
 import { ConsultarProductosCambioPreciosMasivo } from "../../../../../interfaces/gestion-producto/producto/interfaces-producto";
 import { ResponsePost } from "../../../../../interfaces/generales/interfaces-generales";
 
@@ -11,11 +12,7 @@ export function useCambioPrecios(usuarioId: number | null) {
   const buscarProductos = async (filtros: any) => {
     setLoading(true);
 
-    const productosFiltrados =
-      await CambioPreciosMasivoService.obtenerDesde(
-        filtros,
-        "productos"
-      );
+    const productosFiltrados = await ProductoService.obtener(filtros);
 
     setProductos(productosFiltrados.data);
     setLoading(false);

@@ -273,8 +273,8 @@ export default function FiltrosCambioPrecios({
                 type="button"
                 onClick={() => setTipoActualizacion("PORCENTAJE")}
                 className={`px-3 py-2 rounded-md text-sm font-medium ${tipoActualizacion === "PORCENTAJE"
-                    ? "bg-blue-600 text-white"
-                    : "bg-slate-100 text-slate-700"
+                  ? "bg-blue-600 text-white"
+                  : "bg-slate-100 text-slate-700"
                   }`}
               >
                 %
@@ -283,8 +283,8 @@ export default function FiltrosCambioPrecios({
                 type="button"
                 onClick={() => setTipoActualizacion("MONTO")}
                 className={`px-3 py-2 rounded-md text-sm font-medium ${tipoActualizacion === "MONTO"
-                    ? "bg-blue-600 text-white"
-                    : "bg-slate-100 text-slate-700"
+                  ? "bg-blue-600 text-white"
+                  : "bg-slate-100 text-slate-700"
                   }`}
               >
                 Monto
@@ -309,12 +309,12 @@ export default function FiltrosCambioPrecios({
           <Button
             variant="outline"
             onClick={() => onAplicarCambios(valor, tipoActualizacion)}
-            className={`self-end ${productosLength === 0
-                ? "bg-gray-400 text-gray-600 cursor-not-allowed"
-                : "bg-blue-500 text-white hover:bg-blue-800"
+            className={`self-end ${!Number.isFinite(valor) || valor === 0
+              ? "bg-gray-400 text-gray-600 cursor-not-allowed"
+              : "bg-blue-500 text-white hover:bg-blue-800"
               }`}
             title={tipoActualizacion === "PORCENTAJE" ? "Aplicar porcentaje" : "Aplicar monto"}
-            disabled={productosLength === 0}
+            disabled={!Number.isFinite(valor) || valor === 0}
           >
             <Check className="w-4 h-4" />
           </Button>

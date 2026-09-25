@@ -57,7 +57,13 @@ export const menuItems: MenuItem[] = [
         icon: ShoppingBag,
         label: "Producto",
         path: "producto",
-        roles: [Rol.ADMINISTRADOR, Rol.VENDEDOR, Rol.REPARTIDOR, Rol.REPOSITOR,Rol.ROOT],
+        roles: [Rol.ADMINISTRADOR, Rol.VENDEDOR, Rol.REPARTIDOR, Rol.REPOSITOR, Rol.ROOT],
+      },
+      {
+        icon: DollarSign,
+        label: "Cambio de precios",
+        path: "cambio-precios-masivo",
+        roles: [Rol.ADMINISTRADOR, Rol.EMPLEADO, Rol.ROOT],
       },
       {
         icon: DollarSign,
@@ -68,13 +74,13 @@ export const menuItems: MenuItem[] = [
           { icon: Layers, label: "Líneas", path: "linea" },
           { icon: PackageOpen, label: "Presentaciones", path: "presentacion" },
         ],
-        roles: [Rol.ADMINISTRADOR,Rol.ROOT,Rol.ROOT],
+        roles: [Rol.ADMINISTRADOR, Rol.ROOT, Rol.ROOT],
       },
     ],
-    roles: [Rol.ADMINISTRADOR, Rol.VENDEDOR, Rol.REPARTIDOR, Rol.REPOSITOR,Rol.ROOT],
+    roles: [Rol.ADMINISTRADOR, Rol.EMPLEADO, Rol.VENDEDOR, Rol.REPARTIDOR, Rol.REPOSITOR, Rol.ROOT],
   },
 
-  
+
   {
     icon: Building,
     label: "Organización",
@@ -84,12 +90,12 @@ export const menuItems: MenuItem[] = [
         icon: Users,
         label: "Cliente",
         path: "cliente",
-        roles: [Rol.ADMINISTRADOR, Rol.VENDEDOR, Rol.REPARTIDOR, Rol.COBRADOR,Rol.ROOT],
+        roles: [Rol.ADMINISTRADOR, Rol.VENDEDOR, Rol.REPARTIDOR, Rol.COBRADOR, Rol.ROOT],
       },
-      { icon: Users, label: "Proveedor", path: "proveedor", roles: [Rol.ADMINISTRADOR,Rol.ROOT] },
-      { icon: Users, label: "Personal", path: "personal", visibleOnMobile: false, roles: [Rol.ADMINISTRADOR,Rol.ROOT] },
+      { icon: Users, label: "Proveedor", path: "proveedor", roles: [Rol.ADMINISTRADOR, Rol.ROOT] },
+      { icon: Users, label: "Personal", path: "personal", visibleOnMobile: false, roles: [Rol.ADMINISTRADOR, Rol.ROOT] },
     ],
-    roles: [Rol.ADMINISTRADOR, Rol.VENDEDOR, Rol.REPARTIDOR, Rol.COBRADOR,Rol.ROOT], //acá aparece el rol permitido
+    roles: [Rol.ADMINISTRADOR, Rol.VENDEDOR, Rol.REPARTIDOR, Rol.COBRADOR, Rol.ROOT], //acá aparece el rol permitido
   },
 
 ];

@@ -11,6 +11,9 @@ const baseService = createCrudService<FormValues>("cambio-precios");
 const CambioPreciosMasivoService = {
   ...baseService,
 
+  obtenerTotales: (filtros: any, entidades: string) =>
+    ProductoService.obtenerTotales(filtros, entidades),
+
   aplicarCambios: async (payload: {
     tipo: "PORCENTAJE" | "MONTO";
     valor: number;

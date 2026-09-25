@@ -106,21 +106,7 @@ export default function CambioPreciosMasivo() {
   }, [buscarLineas]);
 
   useEffect(() => {
-    const fetchSublineas = async () => {
-      setError(null);
-      try {
-        if (valoresFiltros.lineaId && valoresFiltros.lineaId !== 0) {
-          const sublineasTotales = await CambioPreciosMasivoService.obtenerTotalesPara(
-            valoresFiltros.lineaId || 0,
-            "sublineas"
-          );
-          setSublineas(sublineasTotales.data);
-        }
-      } catch {
-        setError("No se pudieron cargar las sublíneas.");
-      }
-    };
-    fetchSublineas();
+    setSublineas([]);
   }, [valoresFiltros.lineaId]);
 
   const handleAbrirActualizarProducto = useCallback(
@@ -379,7 +365,6 @@ export default function CambioPreciosMasivo() {
                   buscarProductos({
                     marcaId: valoresFiltros.marcaId,
                     lineaId: valoresFiltros.lineaId,
-                    subLineaId: valoresFiltros.sublineaId,
                   })
                 }
                 onAplicarCambios={handleAplicarCambiosMasivos}
