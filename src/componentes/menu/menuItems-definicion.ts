@@ -23,6 +23,7 @@ import {
   Smartphone,
   Bell,
   MessageSquare,
+  History,
 } from "lucide-react";
 import { Rol } from "../../interfaces/generales/interfaces-generales";
 
@@ -63,6 +64,12 @@ export const menuItems: MenuItem[] = [
         icon: DollarSign,
         label: "Cambio de precios",
         path: "cambio-precios-masivo",
+        roles: [Rol.ADMINISTRADOR, Rol.EMPLEADO, Rol.ROOT],
+      },
+      {
+        icon: History,
+        label: "Historial de precios",
+        path: "historial-precios",
         roles: [Rol.ADMINISTRADOR, Rol.EMPLEADO, Rol.ROOT],
       },
       {

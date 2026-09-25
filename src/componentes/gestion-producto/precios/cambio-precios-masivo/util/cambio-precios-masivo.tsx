@@ -18,6 +18,7 @@ import { getUsuarioId } from "../../../../../utils/auth";
 import { useCambioPrecios } from "../hooks/useCambioPrecios";
 import TablaCambioPrecios from "../componentes/tabla-cambio-precios";
 import FiltrosCambioPrecios from "../componentes/filtros-cambio-precios";
+import { parseApiError } from "../../../../../utils/errores";
 
 export default function CambioPreciosMasivo() {
   const [error, setError] = useState<string | null>(null);
@@ -197,12 +198,25 @@ export default function CambioPreciosMasivo() {
   }, [guardarCambios, addAlert]);
 
   const handleAplicarCambiosMasivos = useCallback(
-    async (valor: number, tipo: "PORCENTAJE" | "MONTO") => {
+    async (valor: number, tipo: "PORCENTAJE" | "MONTO", motivo: string) => {
+      // CR-007: se valida acá para no gastar un request con un 400.
+      if (!motivo.trim()) {
+        addAlert({
+          type: TipoAlerta.ERROR,
+          title: TituloAlerta.ERROR,
+          message: "Debes ingresar el motivo del cambio de precio.",
+          autoClose: true,
+          duration: 3000,
+        });
+        return;
+      }
+
       try {
         const response = await aplicarCambios(
           valor,
           tipo,
           valoresFiltros.lineaId && valoresFiltros.lineaId !== 0 ? valoresFiltros.lineaId : undefined,
+          motivo,
         );
 
         addAlert({
@@ -216,7 +230,7 @@ export default function CambioPreciosMasivo() {
         addAlert({
           type: TipoAlerta.ERROR,
           title: TituloAlerta.ERROR,
-          message: "No se pudo aplicar la actualización masiva de precios.",
+          message: parseApiError(error),
           autoClose: true,
           duration: 3000,
         });

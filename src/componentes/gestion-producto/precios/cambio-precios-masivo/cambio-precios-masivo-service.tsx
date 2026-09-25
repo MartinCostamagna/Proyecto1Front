@@ -1,7 +1,7 @@
 import axiosConfig from "../../../../utils/axiosConfig";
 import axios from "axios";
 import { createCrudService } from "../../../../utils/crudFactory";
-import { FormValues } from "../../producto/interfaces-validaciones-producto";
+import { FormValues } from "../../producto/interfaces/interfaces-validaciones-producto";
 import ProductoService from "../../producto/services/producto-service";
 
 const apiUrl = axiosConfig.apiUrl;
@@ -19,6 +19,7 @@ const CambioPreciosMasivoService = {
     valor: number;
     lineaId?: number;
     usuarioId: number;
+    motivo: string;
   }) => {
     return ProductoService.actualizarPreciosMasivos(payload);
   },

@@ -22,6 +22,7 @@ export function useCambioPrecios(usuarioId: number | null) {
     valor: number,
     tipo: "PORCENTAJE" | "MONTO" = "PORCENTAJE",
     lineaId?: number,
+    motivo?: string,
   ) => {
     setLoading(true);
 
@@ -30,6 +31,8 @@ export function useCambioPrecios(usuarioId: number | null) {
       valor,
       lineaId,
       usuarioId,
+      // CR-007: el backend exige el motivo para todo cambio de precio.
+      motivo: motivo?.trim() ?? "",
     };
 
     const response = await CambioPreciosMasivoService.aplicarCambios(payload);

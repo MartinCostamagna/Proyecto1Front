@@ -49,14 +49,13 @@ export default function RegistrarActualizarProductoForm({
 
   const { configuracion } = useConfiguracionSistema();
   const [rStockCritico, setStockCritico] = useState(false);
-  const [pack, setPack] = useState(false);
   const [usaOferta, setUsaOferta] = useState(false);
   const [lineaSeleccionada, setLineaSeleccionada] = useState<Linea>({} as Linea);
 
   console.log("Configuración del sistema:", configuracion);
 
   const methods = useForm<FormValues>({
-    resolver: yupResolver(schema(rStockCritico, pack, usaOferta)),
+    resolver: yupResolver(schema(rStockCritico, usaOferta)),
     defaultValues: producto
       ? transformData(producto)
       : {
@@ -95,9 +94,7 @@ export default function RegistrarActualizarProductoForm({
 
   const stock = watch(`stock`);
   const stockMinimo = watch("stockMinimo");
-  const cantidadPorPack = watch("cantidadPorPack");
   const utilizaStockMinimo = watch("utilizaStockMinimo");
-  const utilizaPack = watch("utilizaPack");
   const costo = watch("costo") || 0;
   const porcentaje = watch("porcentaje") || 0;
   const precio = watch("precio") || 0;
@@ -134,11 +131,7 @@ export default function RegistrarActualizarProductoForm({
     if (!utilizaStockMinimo) {
       setValue("stockMinimo", 0);
     }
-    if (!utilizaPack) {
-      setValue("cantidadPorPack", 0);
-    }
-    
-  }, [utilizaStockMinimo, utilizaPack, false, setValue]);
+  }, [utilizaStockMinimo, false, setValue]);
 
   useEffect(() => {
     setValue("stockMinimo", lineaSeleccionada.stockMinimo || 0);
@@ -146,10 +139,9 @@ export default function RegistrarActualizarProductoForm({
   }, [lineaSeleccionada]);
 
   useEffect(() => {
-    setPack(utilizaPack || false);
     setStockCritico(utilizaStockMinimo || false);
     setUsaOferta(false);
-  }, [utilizaPack, utilizaStockMinimo, false]);
+  }, [utilizaStockMinimo, false]);
 
   useEffect(() => {
     const fetchData = async () => {
@@ -177,8 +169,6 @@ export default function RegistrarActualizarProductoForm({
 
           setValue("stockMinimo", producto.stockMinimo || 0);
           setValue("utilizaStockMinimo", producto.utilizaStockMinimo || false);
-          setValue("cantidadPorPack", producto.cantidadPorPack || 0);
-          setValue("utilizaPack", producto.utilizaPack || false);
         
           console.error("llega aca", producto);
         
@@ -548,29 +538,6 @@ export default function RegistrarActualizarProductoForm({
                       value={stockMinimo || 0}
                       onChange={(value) => setValue(`stockMinimo`, Number(value))}
                       disabled={utilizaStockMinimo ? false : true}
-                    />
-                  </div>
-
-                  
-
-                  <div className="flex flex-col sm:flex-row items-start sm:items-center gap-2 flex-1 min-w-[140px]">
-                    <div className="col-span-full flex flex-wrap gap-4 mt-8">
-                      <label className="flex items-center space-x-2">
-                        <input
-                          type="checkbox"
-                          {...methods.register("utilizaPack")}
-                          className={`w-5 h-5 text-blue-600 border-gray-300 rounded focus:ring-blue-500`}
-                          disabled={producto && producto.sistema > 0 ? true : false}
-                        />
-                      </label>
-                    </div>
-
-                    <CantidadesInput
-                      name={`cantidadPorPack`}
-                      label="Cantidad Pack"
-                      value={cantidadPorPack || 0}
-                      onChange={(value) => setValue(`cantidadPorPack`, Number(value))}
-                      disabled={utilizaPack ? false : true}
                     />
                   </div>
                 </div>

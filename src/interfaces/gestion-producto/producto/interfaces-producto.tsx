@@ -50,10 +50,8 @@ export interface Producto {
   itemsProveedor?: ItemProveedor[] | null;
  */
   stockMinimo: number;
-  cantidadPorPack: number;
   utilizaStockMinimo: boolean;
-  utilizaPack: boolean;
- // oferta: boolean;
+  // oferta: boolean;
  // cantidadOferta: number;
  /*  porcentajeOcasional: number;
   porcentajeMayorista: number;
@@ -167,8 +165,6 @@ export interface ProductoSeleccionado {
   porcentajeMayorista: number;
   porcentajeCliente: number;
   porcentajeOferta: number;
-  utilizaPack: boolean;
-  cantidadPorPack: number;
   utilizaStockMinimo: boolean;
   stockMinimo: number;
   cantidadOferta: number;

@@ -13,7 +13,7 @@ type Props = {
   sublineas: any[];
   productosLength: number;
   onBuscar: () => void;
-  onAplicarCambios: (valor: number, tipo: "PORCENTAJE" | "MONTO") => void;
+  onAplicarCambios: (valor: number, tipo: "PORCENTAJE" | "MONTO", motivo: string) => void;
   onGuardarCambios: () => void;
   fetchMarcas: () => void;
   fetchLineas: () => void;
@@ -36,6 +36,8 @@ export default function FiltrosCambioPrecios({
 }: Props) {
   const [tipoActualizacion, setTipoActualizacion] = useState<"PORCENTAJE" | "MONTO">("PORCENTAJE");
   const [valor, setValor] = useState<number>(0);
+  // CR-007: motivo obligatorio del cambio de precio
+  const [motivo, setMotivo] = useState<string>("");
   return (
     <CardHeader className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 p-4">
       {/* Filtros y estadísticas */}
@@ -306,15 +308,31 @@ export default function FiltrosCambioPrecios({
             />
           </div>
 
+          <div className="flex flex-col gap-2 min-w-[220px] flex-grow max-w-md">
+            <label className="text-xs font-medium text-gray-700 dark:text-gray-200">
+              Motivo del cambio <span className="text-red-500">*</span>
+            </label>
+            <Input
+              type="text"
+              value={motivo}
+              onChange={(e) => setMotivo(e.target.value)}
+              placeholder="Ej: Aumento de lista de precios de mayo"
+              className="bg-white dark:bg-slate-600 border-gray-300 dark:border-slate-500"
+            />
+            <span className="text-[11px] text-gray-500">
+              CR-007: queda registrado en el historial de cada producto afectado.
+            </span>
+          </div>
+
           <Button
             variant="outline"
-            onClick={() => onAplicarCambios(valor, tipoActualizacion)}
-            className={`self-end ${!Number.isFinite(valor) || valor === 0
+            onClick={() => onAplicarCambios(valor, tipoActualizacion, motivo)}
+            className={`self-end ${!Number.isFinite(valor) || valor === 0 || !motivo.trim()
               ? "bg-gray-400 text-gray-600 cursor-not-allowed"
               : "bg-blue-500 text-white hover:bg-blue-800"
               }`}
             title={tipoActualizacion === "PORCENTAJE" ? "Aplicar porcentaje" : "Aplicar monto"}
-            disabled={!Number.isFinite(valor) || valor === 0}
+            disabled={!Number.isFinite(valor) || valor === 0 || !motivo.trim()}
           >
             <Check className="w-4 h-4" />
           </Button>
